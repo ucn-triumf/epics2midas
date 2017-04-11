@@ -40,7 +40,7 @@ INT event_buffer_size = 10 * 10000;
 /*-- Equipment list ------------------------------------------------*/
 
 /* 
-The following statement allocates 20 channels for the beamline
+The following statement allocates 40 channels for the beamline
 control through the epics channel access device driver. The 
 EPICS channel names are stored under 
    
@@ -70,7 +70,7 @@ by EPICS.
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
-  {"Source", epics_ca, 20, NULL},  /* disable CMD_SET_LABEL */
+  {"Source", epics_ca, 40, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
@@ -129,7 +129,7 @@ INT frontend_exit()
 /*-- Frontend Loop -------------------------------------------------*/
 /* Issue a watchdog counter every second for the Epics world
    for R/W access control.
-   This counter will appear in the measured variable under index 19.
+   This counter will appear in the measured variable under index 39.
 */
 INT frontend_loop()
 {
@@ -148,8 +148,8 @@ INT frontend_loop()
       if (!hWatch)
 	{
 	  cm_get_experiment_database(&hDB, NULL);
-	  status = db_find_key(hDB, 0, "/equipment/Beamline/variables/demand", &hWatch);
-	  status = db_find_key(hDB, 0, "/equipment/Beamline/variables/measured", &hRespond);
+	  status = db_find_key(hDB, 0, "/equipment/SourceEpics/variables/demand", &hWatch);
+	  status = db_find_key(hDB, 0, "/equipment/SourceEpics/variables/measured", &hRespond);
 	  if (status != DB_SUCCESS) {
 	    cm_msg(MERROR, "frontend_loop", "key not found");
 	    return FE_ERR_HW;
@@ -158,11 +158,11 @@ INT frontend_loop()
       if (hWatch) {
 	/* Check if Epics alive */
 	size = sizeof(float);
-	db_get_data_index(hDB, hRespond, &cat, &size, 19, TID_FLOAT);
-	if (abs(cat - dog) > 10.f)
-	  cm_msg(MINFO,"feEpics","R/W Access to Epics is in jeopardy!");
+	db_get_data_index(hDB, hRespond, &cat, &size, 39, TID_FLOAT);
+	//if (abs(cat - dog) > 10.f)
+	//cm_msg(MINFO,"feEpics","R/W Access to Epics is in jeopardy!");
 	
-	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 19, TID_FLOAT);
+	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 39, TID_FLOAT);
       }
       if (!((INT)++dog % 100)) dog = 0.f;
     }

@@ -33,7 +33,7 @@
 #define CHN_NAME_LENGTH 32      /* length of channel names */
 
 typedef struct {
-    char  value[20];
+    char  value[40];
     chid  chan_id;  //    chid *pv_handles;
     evid  evt_id;
 } CA_NODE;
@@ -163,7 +163,7 @@ INT epics_ca_init(HNDLE hKey, void **pinfo, INT channels)
     SEVCHK(ca_create_channel(info->channel_names + CHN_NAME_LENGTH * i
            , NULL // connectionCallback
            , &(info->caid[i])
-           , 20
+           , 40
            , &(info->caid[i].chan_id))
      , "ca_create_channel");
     SEVCHK(ca_replace_access_rights_event(info->caid[i].chan_id
