@@ -326,13 +326,15 @@ INT epics_ca(INT cmd, ...)
       case CMD_SET:
   channel = va_arg(argptr, INT);
   value = (float) va_arg(argptr, double);
-  status = epics_ca_set(info, channel, value);
+  // remove calls to ca_put, since we don't currently want to write to EPICS
+  status = FE_SUCCESS; // epics_ca_set(info, channel, value);
   break;
 
       case CMD_SET_LABEL:
   channel = va_arg(argptr, INT);
   label = va_arg(argptr, char *);
-  status = epics_ca_set_label(info, channel, label);
+  // remove calls to ca_put, since we don't currently want to write to EPICS
+  status = FE_SUCCESS; //epics_ca_set_label(info, channel, label);
   break;
 
       case CMD_GET:
