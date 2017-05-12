@@ -57,12 +57,20 @@ CFLAGS = -g  -D_POSIX_C_SOURCE=199506L -D_POSIX_THREADS -D_XOPEN_SOURCE=500 \
 	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include -I$(EPICS_DIR)/include/os/Linux/
 LDFLAGS =
 
-all: fe_epics
+all: fe_epics fe_epics_beamline
 
 fe_epics:  $(LIB) $(LIB_DIR)/mfe.o frontend.o $(DRIVERS)
 	$(CCXX) $(CFLAGS) -o fe_epics frontend.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
 
+
+fe_epics_beamline:  $(LIB) $(LIB_DIR)/mfe.o frontend_beamline.o $(DRIVERS)
+	$(CCXX) $(CFLAGS) -o fe_epics_beamline frontend_beamline.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
+
+
 frontend.o: frontend.c
+	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
+
+frontend_beamline.o: frontend_beamline.c
 	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
 
 generic.o: $(DRV_DIR)/generic.c
