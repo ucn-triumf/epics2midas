@@ -70,7 +70,7 @@ by EPICS.
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
-  {"Beamline", epics_ca, 20, NULL},  /* disable CMD_SET_LABEL */
+  {"Beamline", epics_ca, 40, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
@@ -129,7 +129,7 @@ INT frontend_exit()
 /*-- Frontend Loop -------------------------------------------------*/
 /* Issue a watchdog counter every second for the Epics world
    for R/W access control.
-   This counter will appear in the measured variable under index 19.
+   This counter will appear in the measured variable under index 39.
 */
 INT frontend_loop()
 {
@@ -158,11 +158,11 @@ INT frontend_loop()
       if (hWatch) {
 	/* Check if Epics alive */
 	size = sizeof(float);
-	db_get_data_index(hDB, hRespond, &cat, &size, 19, TID_FLOAT);
+	db_get_data_index(hDB, hRespond, &cat, &size, 39, TID_FLOAT);
 	//if (abs(cat - dog) > 10.f)
 	//cm_msg(MINFO,"feEpics","R/W Access to Epics is in jeopardy!");
 	
-	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 19, TID_FLOAT);
+	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 39, TID_FLOAT);
       }
       if (!((INT)++dog % 100)) dog = 0.f;
     }
