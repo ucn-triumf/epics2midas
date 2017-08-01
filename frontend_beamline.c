@@ -40,7 +40,7 @@ INT event_buffer_size = 10 * 10000;
 /*-- Equipment list ------------------------------------------------*/
 
 /* 
-The following statement allocates 40 channels for the beamline
+The following statement allocates 33 channels for the beamline
 control through the epics channel access device driver. The 
 EPICS channel names are stored under 
    
@@ -70,7 +70,7 @@ by EPICS.
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
-  {"Beamline", epics_ca, 40, NULL},  /* disable CMD_SET_LABEL */
+  {"Beamline", epics_ca, 33, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
@@ -129,7 +129,7 @@ INT frontend_exit()
 /*-- Frontend Loop -------------------------------------------------*/
 /* Issue a watchdog counter every second for the Epics world
    for R/W access control.
-   This counter will appear in the measured variable under index 39.
+   This counter will appear in the measured variable under index 32.
 */
 INT frontend_loop()
 {
@@ -158,11 +158,11 @@ INT frontend_loop()
       if (hWatch) {
 	/* Check if Epics alive */
 	size = sizeof(float);
-	db_get_data_index(hDB, hRespond, &cat, &size, 39, TID_FLOAT);
+	db_get_data_index(hDB, hRespond, &cat, &size, 32, TID_FLOAT);
 	//if (abs(cat - dog) > 10.f)
 	//cm_msg(MINFO,"feEpics","R/W Access to Epics is in jeopardy!");
 	
-	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 39, TID_FLOAT);
+	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 32, TID_FLOAT);
       }
       if (!((INT)++dog % 100)) dog = 0.f;
     }
