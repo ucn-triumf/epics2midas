@@ -37,7 +37,13 @@ INT max_event_size = 10000;
 /* buffer size to hold events */
 INT event_buffer_size = 10 * 10000;
 
+char *bank_name = "EPBL";
+
+
 /*-- Equipment list ------------------------------------------------*/
+
+
+
 
 /* 
 The following statement allocates 33 channels for the beamline
@@ -66,7 +72,7 @@ taken from MIDAS and set in EPICS.
 The same can be done with the demand values. If the command
 CMD_SET_DEMAND is disabled, the demand value is always determied
 by EPICS.
-*/
+*/  
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {

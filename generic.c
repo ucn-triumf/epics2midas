@@ -434,6 +434,8 @@ INT gen_idle(EQUIPMENT * pequipment)
    return status;
 }
 
+
+extern char *bank_name;
 /*------------------------------------------------------------------*/
 
 INT cd_gen_read(char *pevent, int offset)
@@ -466,7 +468,7 @@ INT cd_gen_read(char *pevent, int offset)
       bk_close(pevent, pdata);
 
       /* create MSRD bank */
-      bk_create(pevent, "MSRD", TID_FLOAT, (void **)&pdata);
+      bk_create(pevent, bank_name, TID_FLOAT, (void **)&pdata);
       memcpy(pdata, gen_info->measured, sizeof(float) * gen_info->num_channels);
       pdata += gen_info->num_channels;
       bk_close(pevent, pdata);
