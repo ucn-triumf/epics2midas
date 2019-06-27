@@ -37,13 +37,15 @@ for line in qbfile:
                         if controlword in byte:
                             fixed_word += byte + "/Measured:"
                         else:
-                            if ' ' in byte:
-                                byte = byte.replace(' ','_')
-                                fixed_word += byte.lower()
-                            else:
-                                fixed_word += byte.lower() + "_"
-                
-                    fixed_line += fixed_word
+                            fixed_word += byte + ":"
+                            #if ' ' in byte:
+                            #    byte = byte.replace(' ','_')
+                            #    fixed_word += byte.lower()
+                            #else:
+                            #    fixed_word += byte.lower() + "_"
+                	   
+                    #fixed_line += fixed_word
+                    fixed_line += word.replace(controlword,controlword + "/Measured")
                 else:
                     fixed_line += word
 
