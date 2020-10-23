@@ -120,7 +120,7 @@ void epics_ca_callback(struct event_handler_args args)
   }
 
   //printf("DEADBEEF: Ch#%d %s type:%d count:%d %f \n", i, info->channel_names + CHN_NAME_LENGTH * i, ca_field_type(info->caid[i].chan_id), args.count, value);
-  printf(".");
+  //  printf(".");
 
 }
 
@@ -273,7 +273,7 @@ INT epics_ca_get(CA_INFO * info, INT channel, float *pvalue, int call_pend)
 
   *pvalue = info->array[channel];
 
-  if(channel%20 == 0) printf("thisresult %i %i %f %i\n",thisresult,channel,*pvalue, call_pend);
+  ///  if(channel%20 == 0) printf("thisresult %i %i %f %i\n",thisresult,channel,*pvalue, call_pend);
 
   return FE_SUCCESS;
 }

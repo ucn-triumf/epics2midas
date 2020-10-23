@@ -74,7 +74,6 @@ INT gen_read(EQUIPMENT * pequipment, int channel)
    HNDLE hDB;
    gen_info = (GEN_INFO *) pequipment->cd_info;
    cm_get_experiment_database(&hDB, NULL);
-   printf("Start genread %f\n",gen_info->measured[20]);
    
    for (i=0 ; i < gen_info->num_channels ; i++) {
      int call_pend = 0;
@@ -84,6 +83,7 @@ INT gen_read(EQUIPMENT * pequipment, int channel)
 			    &gen_info->measured[i], call_pend);
    }
    
+   BOOL updated = FALSE;
    /* check for update measured */
    for (i = 0; i < gen_info->num_channels; i++) {
       /* update if change is more than update_threshold */
@@ -92,8 +92,8 @@ INT gen_read(EQUIPMENT * pequipment, int channel)
           (!ss_isnan(gen_info->measured[i]) && !ss_isnan(gen_info->measured_mirror[i]) &&
            abs(gen_info->measured[i] - gen_info->measured_mirror[i]) >
            gen_info->update_threshold[i])) {
-	 printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX This time things are different!!!!!!!!!!!!!!!!!!!! genread %i\n",i);
-
+	//printf("XXXXXXXXXXXXXXXXXXXXXXXXXXXXX This time things are different!!!!!!!!!!!!!!!!!!!! genread %i\n",i);
+	 updated = TRUE;
          for (i = 0; i < gen_info->num_channels; i++)
 	   gen_info->measured_mirror[i] = gen_info->measured[i];   /// WOW, WHATS THIS?  Why is it calling    for (i = 0; i < gen_info->num_channels;  within a loop    for (i = 0; i < gen_info->num_channels; 
 	 ///  THIS SEEMS WRONG... SAME INDEX!!!! SOMETHING CRAZY HERE, NEED TO GO BACK TO LOOK AT THE ORIGINAL CODE AND FIGURED OUT WHAT GOT FUCKED UP...
@@ -107,6 +107,8 @@ INT gen_read(EQUIPMENT * pequipment, int channel)
          break;
       }
    }
+
+   printf("Finished EPIC PV genread(); EPICS PV change? = %i ; PG7 = %f\n",updated,gen_info->measured[20]);
 
    /*---- read demand value ----*/
 
