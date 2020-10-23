@@ -26,7 +26,7 @@ char *frontend_file_name = __FILE__;
 BOOL frontend_call_loop = TRUE;
 
 /* a frontend status page is displayed with this frequency in ms    */
-INT display_period = 2000;
+INT display_period = 0;
 
 /* maximum event size for fragmented events (EQ_FRAGMENTED) */
 INT max_event_size_frag = 5 * 1024 * 1024;
@@ -86,7 +86,7 @@ EQUIPMENT equipment[] = {
     "FIXED",                    /* format */
     TRUE,                       /* enabled */
     RO_RUNNING | RO_TRANSITIONS,        /* read when running and on transitions */
-    10000,                      /* read every 10 sec */
+    1000,                      /* read every 10 sec */
     0,                          /* stop run after this event limit */
     0,                          /* number of sub events */
     1,                          /* log history every event */
@@ -142,7 +142,7 @@ INT frontend_loop()
   
   /* slow down frontend not to eat all CPU cycles */
   /* ss_sleep(50); */
-  cm_yield(1000); /* 15Feb05 */
+  cm_yield(500); /* 15Feb05 */
   
   if (ss_time() - watchdog_time > 1)
     {

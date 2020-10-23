@@ -146,7 +146,7 @@ INT frontend_loop()
   
   /* slow down frontend not to eat all CPU cycles */
   /* ss_sleep(50); */
-  cm_yield(1000); /* 15Feb05 */
+  cm_yield(500); /* 15Feb05 */
   
   if (ss_time() - watchdog_time > 1)
     {

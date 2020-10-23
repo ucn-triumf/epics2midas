@@ -113,11 +113,14 @@ void epics_ca_callback(struct event_handler_args args)
   for (i = 0; i < info->num_channels; i++)
     if (info->caid[i].chan_id == args.chid)
       break;
-  if (i < info->num_channels)
+  float value = -9999;
+  if (i < info->num_channels){
     info->array[i] = *((float *) args.dbr);
+    value = info->array[i];
+  }
 
-  /*  printf("Ch#%d type:%d count:%d\n", i, ca_field_type(info->caid[i].chan_id), args.count);
-   */
+  //printf("DEADBEEF: Ch#%d %s type:%d count:%d %f \n", i, info->channel_names + CHN_NAME_LENGTH * i, ca_field_type(info->caid[i].chan_id), args.count, value);
+  printf(".");
 
 }
 
@@ -263,13 +266,14 @@ INT epics_ca_set_label(CA_INFO * info, INT channels, char *label)
 
 /*----------------------------------------------------------------------------*/
 
-INT epics_ca_get(CA_INFO * info, INT channel, float *pvalue)
+INT epics_ca_get(CA_INFO * info, INT channel, float *pvalue, int call_pend)
 {
-  int thisresult = ca_pend_event(0.01);
+  int thisresult;
+  if(call_pend == 1) thisresult = ca_pend_event(0.01); // only call this for the first channel.  Will update all the channels
 
   *pvalue = info->array[channel];
 
-  printf("thisresult %i %i %f\n",thisresult,channel,*pvalue);
+  if(channel%20 == 0) printf("thisresult %i %i %f %i\n",thisresult,channel,*pvalue, call_pend);
 
   return FE_SUCCESS;
 }
@@ -280,8 +284,12 @@ INT epics_ca_get_all(CA_INFO * info, INT channels, float *pvalue)
 {
    int i;
 
-   for (i = 0; i < MIN(info->num_channels, channels); i++)
-      epics_ca_get(info, i, pvalue + i);
+   for (i = 0; i < MIN(info->num_channels, channels); i++){
+     int call_pend = 0;
+     if(i==0){call_pend=1;}
+     epics_ca_get(info, i, pvalue + i, call_pend);
+
+   }
 
    return FE_SUCCESS;
 }
@@ -292,7 +300,7 @@ INT epics_ca(INT cmd, ...)
 {
    va_list argptr;
    HNDLE hKey;
-   INT channel, status;
+   INT channel, status, call_pend;
    DWORD flags;
    float value, *pvalue;
    CA_INFO *info;
@@ -340,7 +348,8 @@ INT epics_ca(INT cmd, ...)
       case CMD_GET:
   channel = va_arg(argptr, INT);
   pvalue = va_arg(argptr, float *);
-  status = epics_ca_get(info, channel, pvalue);
+  call_pend = va_arg(argptr, INT);
+  status = epics_ca_get(info, channel, pvalue, call_pend);
   break;
 
       default:
