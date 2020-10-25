@@ -34,7 +34,7 @@ OSFLAGS = -DOS_LINUX
 # The following lines define direcories. Adjust if necessary
 #                 
 INC_DIR 	= $(MIDASSYS)/include
-LIB_DIR 	= $(MIDASSYS)/linux/lib
+LIB_DIR 	= $(MIDASSYS)/lib
 DRV_DIR		= .
 EPICS_DIR       = $(HOME)/packages/epics/base-3.14.9
 EPICS_LIBDIR    = $(HOME)/packages/epics/base-3.14.9/lib/linux-x86_64
@@ -50,11 +50,10 @@ DRIVERS         = generic.o epics_ca.o
 LIB = $(LIB_DIR)/libmidas.a $(EPICS_LIBDIR)/libca.a $(EPICS_LIBDIR)/libCom.a
 
 # compiler
-CC = gcc
+CC = g++
 CCXX = g++
-CFLAGS = -g  -D_POSIX_C_SOURCE=199506L -D_POSIX_THREADS -D_XOPEN_SOURCE=500 \
-	-DOSITHREAD_USE_DEFAULT_STACK -D_X86_ -DUNIX -D_BSD_SOURCE -Dlinux \
-	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include -I$(EPICS_DIR)/include/os/Linux/
+CFLAGS = -g -Wall \
+	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include/os/Linux/ -I$(EPICS_DIR)/include/   
 LDFLAGS =
 
 all: fe_epics fe_epics_beamline

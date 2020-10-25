@@ -11,6 +11,7 @@
             and ca_context_create(ca_disable_preemptive_callback)
 \********************************************************************/
 
+
 #include <stddef.h>
 #include <stdio.h>
 #include <time.h>
@@ -33,7 +34,7 @@
 #define CHN_NAME_LENGTH 32      /* length of channel names */
 
 typedef struct {
-    char  value[40];
+    char  value[20];
     chid  chan_id;  //    chid *pv_handles;
     evid  evt_id;
 } CA_NODE;
@@ -46,7 +47,7 @@ typedef struct {
     DWORD flags;
 } CA_INFO;
 
-static void printChidInfo(chid chid, char *message)
+static void printChidInfo(chid chid, const char *message)
 {
   printf("\n%s\n",message);
   printf("pv: %s  type(%d) nelements(%ld)", //  host(%s)",
@@ -61,7 +62,7 @@ static void exceptionCallback(struct exception_handler_args args)
   chid        chid = args.chid;
   long        stat = args.stat; /* Channel access status code*/
   const char  *channel;
-  static char *noname = "unknown";
+  static const char *noname = "unknown";
 
   channel = (chid ? ca_name(chid) : noname);
 
@@ -119,8 +120,6 @@ void epics_ca_callback(struct event_handler_args args)
     value = info->array[i];
   }
 
-  //printf("DEADBEEF: Ch#%d %s type:%d count:%d %f \n", i, info->channel_names + CHN_NAME_LENGTH * i, ca_field_type(info->caid[i].chan_id), args.count, value);
-  //  printf(".");
 
 }
 
@@ -133,13 +132,13 @@ INT epics_ca_init(HNDLE hKey, void **pinfo, INT channels)
   CA_INFO *info;
 
   /* allocate info structure */
-  info = calloc(1, sizeof(CA_INFO));
+  info = (CA_INFO*)calloc(1, sizeof(CA_INFO));
   *pinfo = info;
 
   cm_get_experiment_database(&hDB, NULL);
 
   /* get channel names */
-  info->channel_names = calloc(channels, CHN_NAME_LENGTH);
+  info->channel_names = (char*)calloc(channels, CHN_NAME_LENGTH);
   for (i = 0; i < channels; i++)
     sprintf(info->channel_names + CHN_NAME_LENGTH * i, "Channel%d", i);
   db_merge_data(hDB, hKey, "Channel name",
@@ -153,7 +152,7 @@ INT epics_ca_init(HNDLE hKey, void **pinfo, INT channels)
   }
 
   /* allocate arrays */
-  info->array = calloc(channels, sizeof(float));
+  info->array = (float*)calloc(channels, sizeof(float));
   info->caid = (CA_NODE *) calloc(channels, sizeof(CA_NODE));
 
   /* search channels */
@@ -163,23 +162,23 @@ INT epics_ca_init(HNDLE hKey, void **pinfo, INT channels)
   SEVCHK(ca_add_exception_event(exceptionCallback,NULL), "ca_add_exception_event");
 
   for (i = 0; i < channels; i++) {
-    SEVCHK(ca_create_channel(info->channel_names + CHN_NAME_LENGTH * i
-           , NULL // connectionCallback
-           , &(info->caid[i])
-           , 40
-           , &(info->caid[i].chan_id))
-     , "ca_create_channel");
-    SEVCHK(ca_replace_access_rights_event(info->caid[i].chan_id
-            , NULL) // accessRightsCallback)
-     , "ca_replace_access_rights_event");
-    SEVCHK(ca_create_subscription (DBR_FLOAT
-           , 0
-           , info->caid[i].chan_id
-           , DBE_VALUE | DBE_ALARM
-           , epics_ca_callback
-           , info
-           , &(info->caid[i].evt_id))
-     , "ca_add_subscription");
+
+
+    SEVCHK(
+	   ca_create_channel(info->channel_names + CHN_NAME_LENGTH * i
+			     , NULL // connectionCallback
+			     , (void*)&(info->caid[i])
+			     , 40
+			     , &(info->caid[i].chan_id))
+	   , "ca_create_channel");
+    SEVCHK(
+	   ca_replace_access_rights_event(info->caid[i].chan_id
+					  , NULL)
+    // accessRightsCallback)
+	   , "ca_replace_access_rights_event");
+    SEVCHK(
+	   ca_create_subscription (DBR_FLOAT, 0, info->caid[i].chan_id, DBE_VALUE | DBE_ALARM, epics_ca_callback, (void*)info, &(info->caid[i].evt_id))
+	   , "ca_add_subscription");
   }
   /*
     if (ca_pend_io(5.0) == ECA_TIMEOUT) {
@@ -310,17 +309,19 @@ INT epics_ca(INT cmd, ...)
    status = FE_SUCCESS;
 
    if (cmd == CMD_INIT) {
-      void *pinfo;
+
+      void **pinfo;
 
       hKey = va_arg(argptr, HNDLE);
-      pinfo = va_arg(argptr, void *);
+      pinfo = va_arg(argptr, void **);
       channel = va_arg(argptr, INT);
       flags = va_arg(argptr, DWORD);
       status = epics_ca_init(hKey, pinfo, channel);
       info = *(CA_INFO **) pinfo;
       info->flags = flags;
+      printf("flags %i \n",info->flags);
    } else {
-      info = va_arg(argptr, void *);
+     info = (CA_INFO*)va_arg(argptr, void *);
 
       /* only execute command if enabled */
       switch (cmd) {
