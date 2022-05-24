@@ -37,7 +37,7 @@ INT max_event_size_frag = 5 * 1024 * 1024;
 INT max_event_size = 10000;
 
 /* buffer size to hold events */
-INT event_buffer_size = 10 * 10000;
+INT event_buffer_size = 10000000;
 
 char *bank_name = "EPSR";
 

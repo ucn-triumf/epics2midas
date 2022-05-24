@@ -108,7 +108,7 @@ INT gen_read(EQUIPMENT * pequipment, int channel)
       }
    }
 
-   printf("Finished EPIC PV genread(); EPICS PV change? = %i ; PG7 = %f\n",updated,gen_info->measured[20]);
+   printf("Finished EPIC PV genread(); EPICS PV change? = %i ; PG7 = %f\n",updated,gen_info->measured[1]);
 
    /*---- read demand value ----*/
 

@@ -272,7 +272,8 @@ INT epics_ca_get(CA_INFO * info, INT channel, float *pvalue, int call_pend)
 
   *pvalue = info->array[channel];
 
-  ///  if(channel%20 == 0) printf("thisresult %i %i %f %i\n",thisresult,channel,*pvalue, call_pend);
+  if(channel < 3)
+    printf("thisresult %i %i %f %i\n",thisresult,channel,*pvalue, call_pend);
 
   return FE_SUCCESS;
 }
