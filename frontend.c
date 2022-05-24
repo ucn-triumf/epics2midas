@@ -34,10 +34,10 @@ INT display_period = 0;
 INT max_event_size_frag = 5 * 1024 * 1024;
 
 /* maximum event size produced by this frontend */
-INT max_event_size = 10000;
+INT max_event_size = 1000000;
 
 /* buffer size to hold events */
-INT event_buffer_size = 10000000;
+INT event_buffer_size = 20000000;
 
 char *bank_name = "EPSR";
 
