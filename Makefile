@@ -53,23 +53,28 @@ LIB = $(LIB_DIR)/libmidas.a $(EPICS_LIBDIR)/libca.a $(EPICS_LIBDIR)/libCom.a
 CC = g++
 CCXX = g++
 CFLAGS = -g -Wall \
-	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include/os/Linux/ -I$(EPICS_DIR)/include/   
+	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include/os/Linux/ -I$(EPICS_DIR)/include/ -std=c++11   
 LDFLAGS =
 
-all: fe_epics fe_epics_beamline
+all: fe_epics fe_epics_beamline fe_epics_ucn2
 
 fe_epics:  $(LIB) $(LIB_DIR)/mfe.o frontend.o $(DRIVERS)
 	$(CCXX) $(CFLAGS) -o fe_epics frontend.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
 
-
 fe_epics_beamline:  $(LIB) $(LIB_DIR)/mfe.o frontend_beamline.o $(DRIVERS)
 	$(CCXX) $(CFLAGS) -o fe_epics_beamline frontend_beamline.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
+
+fe_epics_ucn2:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2.o $(DRIVERS)
+	$(CCXX) $(CFLAGS) -o fe_epics_ucn2 frontend_ucn2.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
 
 
 frontend.o: frontend.c
 	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
 
 frontend_beamline.o: frontend_beamline.c
+	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
+
+frontend_ucn2.o: frontend_ucn2.c
 	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
 
 generic.o: $(DRV_DIR)/generic.c

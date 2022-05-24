@@ -10,7 +10,6 @@
 
 \********************************************************************/
 
-#include <vector>
 #include <stdio.h>
 #include "midas.h"
 #include "mfe.h"
@@ -20,7 +19,7 @@
 /*-- Globals -------------------------------------------------------*/
 BOOL equipment_common_overwrite = FALSE;
 /* The frontend name (client name) as seen by other MIDAS clients   */
-const char *frontend_name = "feSourceEpics";
+const char *frontend_name = "feUCN2Epics";
 /* The frontend file name, don't change it */
 const char *frontend_file_name = __FILE__;
 
@@ -28,7 +27,7 @@ const char *frontend_file_name = __FILE__;
 BOOL frontend_call_loop = TRUE;
 
 /* a frontend status page is displayed with this frequency in ms    */
-INT display_period = 0;
+INT display_period = 2000;
 
 /* maximum event size for fragmented events (EQ_FRAGMENTED) */
 INT max_event_size_frag = 5 * 1024 * 1024;
@@ -39,12 +38,16 @@ INT max_event_size = 10000;
 /* buffer size to hold events */
 INT event_buffer_size = 10 * 10000;
 
-char *bank_name = "EPSR";
+char *bank_name = "EPBL";
+
 
 /*-- Equipment list ------------------------------------------------*/
 
+
+
+
 /* 
-The following statement allocates 40 channels for the beamline
+The following statement allocates 33 channels for the beamline
 control through the epics channel access device driver. The 
 EPICS channel names are stored under 
    
@@ -70,17 +73,17 @@ taken from MIDAS and set in EPICS.
 The same can be done with the demand values. If the command
 CMD_SET_DEMAND is disabled, the demand value is always determied
 by EPICS.
-*/
+*/  
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
-  {"Source", epics_ca, 160, NULL},  /* disable CMD_SET_LABEL */
+  {"UCN2", epics_ca, 62, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
 EQUIPMENT equipment[] = {
 
-   {"SourceEpics",                 /* equipment name */
+   {"UCN2Epics",                 /* equipment name */
     {3, 0,                       /* event ID, trigger mask */
     "SYSTEM",                   /* event buffer */
     EQ_SLOW,                    /* equipment type */
@@ -88,7 +91,7 @@ EQUIPMENT equipment[] = {
     "FIXED",                    /* format */
     TRUE,                       /* enabled */
     RO_RUNNING | RO_TRANSITIONS,        /* read when running and on transitions */
-    1000,                      /* read every 10 sec */
+    10000,                      /* read every 10 sec */
     0,                          /* stop run after this event limit */
     0,                          /* number of sub events */
     1,                          /* log history every event */
@@ -133,7 +136,7 @@ INT frontend_exit()
 /*-- Frontend Loop -------------------------------------------------*/
 /* Issue a watchdog counter every second for the Epics world
    for R/W access control.
-   This counter will appear in the measured variable under index 159.
+   This counter will appear in the measured variable under index 50.
 */
 INT frontend_loop()
 {
@@ -152,8 +155,8 @@ INT frontend_loop()
       if (!hWatch)
 	{
 	  cm_get_experiment_database(&hDB, NULL);
-	  status = db_find_key(hDB, 0, "/equipment/SourceEpics/variables/demand", &hWatch);
-	  status = db_find_key(hDB, 0, "/equipment/SourceEpics/variables/measured", &hRespond);
+	  status = db_find_key(hDB, 0, "/equipment/BeamlineEpics/variables/demand", &hWatch);
+	  status = db_find_key(hDB, 0, "/equipment/BeamlineEpics/variables/measured", &hRespond);
 	  if (status != DB_SUCCESS) {
 	    cm_msg(MERROR, "frontend_loop", "key not found");
 	    return FE_ERR_HW;
@@ -162,11 +165,11 @@ INT frontend_loop()
       if (hWatch) {
 	/* Check if Epics alive */
 	size = sizeof(float);
-	db_get_data_index(hDB, hRespond, &cat, &size, 159, TID_FLOAT);
+	db_get_data_index(hDB, hRespond, &cat, &size, 61, TID_FLOAT);
 	//if (abs(cat - dog) > 10.f)
 	//cm_msg(MINFO,"feEpics","R/W Access to Epics is in jeopardy!");
 	
-	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 159, TID_FLOAT);
+	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 61, TID_FLOAT);
       }
       if (!((INT)++dog % 100)) dog = 0.f;
     }

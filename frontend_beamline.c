@@ -17,7 +17,7 @@
 #include "epics_ca.h"
 
 /*-- Globals -------------------------------------------------------*/
-
+BOOL equipment_common_overwrite = FALSE;
 /* The frontend name (client name) as seen by other MIDAS clients   */
 const char *frontend_name = "feBeamlineEpics";
 /* The frontend file name, don't change it */
