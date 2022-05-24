@@ -77,7 +77,7 @@ by EPICS.
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
-  {"Beamline", epics_ca, 51, NULL},  /* disable CMD_SET_LABEL */
+  {"Beamline", epics_ca, 62, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
@@ -165,11 +165,11 @@ INT frontend_loop()
       if (hWatch) {
 	/* Check if Epics alive */
 	size = sizeof(float);
-	db_get_data_index(hDB, hRespond, &cat, &size, 50, TID_FLOAT);
+	db_get_data_index(hDB, hRespond, &cat, &size, 61, TID_FLOAT);
 	//if (abs(cat - dog) > 10.f)
 	//cm_msg(MINFO,"feEpics","R/W Access to Epics is in jeopardy!");
 	
-	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 50, TID_FLOAT);
+	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 61, TID_FLOAT);
       }
       if (!((INT)++dog % 100)) dog = 0.f;
     }
