@@ -38,7 +38,7 @@ INT max_event_size = 10000000;
 /* buffer size to hold events */
 INT event_buffer_size = 20000000;
 
-char *bank_name = "EPBL";
+char *bank_name = "EPU2";
 
 
 /*-- Equipment list ------------------------------------------------*/
@@ -155,8 +155,8 @@ INT frontend_loop()
       if (!hWatch)
 	{
 	  cm_get_experiment_database(&hDB, NULL);
-	  status = db_find_key(hDB, 0, "/equipment/BeamlineEpics/variables/demand", &hWatch);
-	  status = db_find_key(hDB, 0, "/equipment/BeamlineEpics/variables/measured", &hRespond);
+	  status = db_find_key(hDB, 0, "/equipment/UCN2Epics/variables/demand", &hWatch);
+	  status = db_find_key(hDB, 0, "/equipment/UCN2Epics/variables/measured", &hRespond);
 	  if (status != DB_SUCCESS) {
 	    cm_msg(MERROR, "frontend_loop", "key not found");
 	    return FE_ERR_HW;
