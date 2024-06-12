@@ -77,13 +77,13 @@ by EPICS.
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
-  {"UCN2fastEpics", epics_ca, 10, NULL},  /* disable CMD_SET_LABEL */
+  {"UCNfastEpics", epics_ca, 10, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
 EQUIPMENT equipment[] = {
 
-   {"UCN2fastEpics",                 /* equipment name */
+   {"UCNfastEpics",                 /* equipment name */
     {3, 0,                       /* event ID, trigger mask */
     "SYSTEM",                   /* event buffer */
     EQ_SLOW,                    /* equipment type */
@@ -155,8 +155,8 @@ INT frontend_loop()
       if (!hWatch)
 	{
 	  cm_get_experiment_database(&hDB, NULL);
-	  status = db_find_key(hDB, 0, "/equipment/UCN2fastEpics/variables/demand", &hWatch);
-	  status = db_find_key(hDB, 0, "/equipment/UCN2fastEpics/variables/measured", &hRespond);
+	  status = db_find_key(hDB, 0, "/equipment/UCNfastEpics/variables/demand", &hWatch);
+	  status = db_find_key(hDB, 0, "/equipment/UCNfastEpics/variables/measured", &hRespond);
 	  if (status != DB_SUCCESS) {
 	    cm_msg(MERROR, "frontend_loop", "key not found");
 	    return FE_ERR_HW;
