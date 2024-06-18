@@ -38,7 +38,7 @@ INT max_event_size = 10000000;
 /* buffer size to hold events */
 INT event_buffer_size = 20000000;
 
-char *bank_name = "EP2T";
+const char *bank_name = "EP2T";
 
 
 /*-- Equipment list ------------------------------------------------*/
@@ -78,12 +78,13 @@ by EPICS.
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
   {"UCN2Temperatures", epics_ca, 102, NULL},  /* disable CMD_SET_LABEL */
+  //{"UCN2Temperatures", epics_ca, 1, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
 EQUIPMENT equipment[] = {
 
-   {"UCN2EpicsTemperatures",                 /* equipment name */
+   {"UCN2EpicsTemperature",                 /* equipment name */
     {3, 0,                       /* event ID, trigger mask */
     "SYSTEM",                   /* event buffer */
     EQ_SLOW,                    /* equipment type */
@@ -155,8 +156,8 @@ INT frontend_loop()
       if (!hWatch)
 	{
 	  cm_get_experiment_database(&hDB, NULL);
-	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsTemperatures/variables/demand", &hWatch);
-	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsTemperatures/variables/measured", &hRespond);
+	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsTemperature/variables/demand", &hWatch);
+	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsTemperature/variables/measured", &hRespond);
 	  if (status != DB_SUCCESS) {
 	    cm_msg(MERROR, "frontend_loop", "key not found");
 	    return FE_ERR_HW;

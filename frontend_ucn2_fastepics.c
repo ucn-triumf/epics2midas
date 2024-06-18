@@ -38,7 +38,7 @@ INT max_event_size = 10000000;
 /* buffer size to hold events */
 INT event_buffer_size = 20000000;
 
-char *bank_name = "EPFA";
+const char *bank_name = "EPFA";
 
 
 /*-- Equipment list ------------------------------------------------*/

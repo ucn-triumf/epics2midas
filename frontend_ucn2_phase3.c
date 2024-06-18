@@ -19,7 +19,7 @@
 /*-- Globals -------------------------------------------------------*/
 BOOL equipment_common_overwrite = FALSE;
 /* The frontend name (client name) as seen by other MIDAS clients   */
-const char *frontend_name = "feUCN2OthersEpics";
+const char *frontend_name = "feUCN2Phase3Epics";
 /* The frontend file name, don't change it */
 const char *frontend_file_name = __FILE__;
 
@@ -38,7 +38,8 @@ INT max_event_size = 10000000;
 /* buffer size to hold events */
 INT event_buffer_size = 20000000;
 
-const char *bank_name = "EP2O";
+const char *bank_name = "EP3A";
+
 
 /*-- Equipment list ------------------------------------------------*/
 
@@ -76,13 +77,13 @@ by EPICS.
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
-  {"UCN2Others", epics_ca, 102, NULL},  /* disable CMD_SET_LABEL */
+  {"UCN2Phase3", epics_ca, 102, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
 EQUIPMENT equipment[] = {
 
-   {"UCN2EpicsOthers",                 /* equipment name */
+   {"UCN2EpicsPhase3",                 /* equipment name */
     {3, 0,                       /* event ID, trigger mask */
     "SYSTEM",                   /* event buffer */
     EQ_SLOW,                    /* equipment type */
@@ -154,8 +155,8 @@ INT frontend_loop()
       if (!hWatch)
 	{
 	  cm_get_experiment_database(&hDB, NULL);
-	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsOthers/variables/demand", &hWatch);
-	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsOthers/variables/measured", &hRespond);
+	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsPhase3/variables/demand", &hWatch);
+	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsPhase3/variables/measured", &hRespond);
 	  if (status != DB_SUCCESS) {
 	    cm_msg(MERROR, "frontend_loop", "key not found");
 	    return FE_ERR_HW;
