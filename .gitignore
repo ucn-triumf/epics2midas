@@ -1,0 +1,4 @@
+*.o
+fe_epics_*
+*.png
+*.gif
