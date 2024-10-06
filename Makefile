@@ -56,7 +56,7 @@ CFLAGS = -g -Wall \
 	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include/os/Linux/ -I$(EPICS_DIR)/include/ -std=c++11   
 LDFLAGS =
 
-all: fe_epics fe_epics_beamline fe_epics_ucn2 fe_epics_ucn2_temperatures fe_epics_ucn2_pressures fe_epics_ucn2_other fe_epics_ucn2_phase2b fe_epics_ucn2_phase3 fe_epics_ucn2_fast
+all: fe_epics fe_epics_beamline fe_epics_ucn2 fe_epics_ucn2_temperatures fe_epics_ucn2_pressures fe_epics_ucn2_other fe_epics_ucn2_phase2b fe_epics_ucn2_phase3 fe_epics_ucn2_phase5_pre fe_epics_ucn2_phase5_oth fe_epics_ucn2_phase5_tmp fe_epics_ucn2_fast
 
 fe_epics:  $(LIB) $(LIB_DIR)/mfe.o frontend.o $(DRIVERS)
 	$(CCXX) $(CFLAGS) -o fe_epics frontend.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
@@ -82,6 +82,15 @@ fe_epics_ucn2_phase2b:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_phase2b.o $(DRIVER
 fe_epics_ucn2_phase3:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_phase3.o $(DRIVERS)
 	$(CCXX) $(CFLAGS) -o fe_epics_ucn2_phase3 frontend_ucn2_phase3.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
 
+
+fe_epics_ucn2_phase5_pre:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_phase5_pre.o $(DRIVERS)
+	$(CCXX) $(CFLAGS) -o fe_epics_ucn2_phase5_pre frontend_ucn2_phase5_pre.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
+
+fe_epics_ucn2_phase5_oth:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_phase5_oth.o $(DRIVERS)
+	$(CCXX) $(CFLAGS) -o fe_epics_ucn2_phase5_oth frontend_ucn2_phase5_oth.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
+
+fe_epics_ucn2_phase5_tmp:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_phase5_tmp.o $(DRIVERS)
+	$(CCXX) $(CFLAGS) -o fe_epics_ucn2_phase5_tmp frontend_ucn2_phase5_tmp.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
 
 
 fe_epics_ucn2_fast:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_fastepics.o $(DRIVERS)
@@ -111,6 +120,17 @@ frontend_ucn2_phase2b.o: frontend_ucn2_phase2b.c
 
 frontend_ucn2_phase3.o: frontend_ucn2_phase3.c
 	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
+
+
+frontend_ucn2_phase5_pre.o: frontend_ucn2_phase5_pre.c
+	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
+
+frontend_ucn2_phase5_oth.o: frontend_ucn2_phase5_oth.c
+	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
+
+frontend_ucn2_phase5_tmp.o: frontend_ucn2_phase5_tmp.c
+	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@
+
 
 frontend_ucn2_fastepics.o: frontend_ucn2_fastepics.c
 	$(CC) $(CFLAGS) $(OSFLAGS) -c $< -o $@

@@ -163,6 +163,8 @@ INT epics_ca_init(HNDLE hKey, void **pinfo, INT channels)
 
   for (i = 0; i < channels; i++) {
 
+    printf("%i \n",i);
+
 
     SEVCHK(
 	   ca_create_channel(info->channel_names + CHN_NAME_LENGTH * i

@@ -19,7 +19,7 @@
 /*-- Globals -------------------------------------------------------*/
 BOOL equipment_common_overwrite = FALSE;
 /* The frontend name (client name) as seen by other MIDAS clients   */
-const char *frontend_name = "feUCN2PressureEpics";
+const char *frontend_name = "feUCN2Pha5PreEp";
 /* The frontend file name, don't change it */
 const char *frontend_file_name = __FILE__;
 
@@ -38,7 +38,7 @@ INT max_event_size = 10000000;
 /* buffer size to hold events */
 INT event_buffer_size = 20000000;
 
-const char *bank_name = "EP2P";
+const char *bank_name = "EP5P";
 
 
 /*-- Equipment list ------------------------------------------------*/
@@ -77,21 +77,20 @@ by EPICS.
 
 /* device driver list */
 DEVICE_DRIVER epics_driver[] = {
-  {"UCN2Press", epics_ca, 22, NULL},  /* disable CMD_SET_LABEL */
-  //{"UCN2Temperatures", epics_ca, 1, NULL},  /* disable CMD_SET_LABEL */
+  {"UCN2Pha5Pre", epics_ca, 102, NULL},  /* disable CMD_SET_LABEL */
   {""}
 };
 
 EQUIPMENT equipment[] = {
 
-   {"UCN2EpicsPressures",                 /* equipment name */
+   {"UCN2EpPha5Pre",                 /* equipment name */
     {3, 0,                       /* event ID, trigger mask */
     "SYSTEM",                   /* event buffer */
     EQ_SLOW,                    /* equipment type */
     0,                          /* event source */
     "FIXED",                    /* format */
     TRUE,                       /* enabled */
-    511,        /* read when running and on transitions */
+    RO_RUNNING | RO_TRANSITIONS,        /* read when running and on transitions */
     10000,                      /* read every 10 sec */
     0,                          /* stop run after this event limit */
     0,                          /* number of sub events */
@@ -156,8 +155,8 @@ INT frontend_loop()
       if (!hWatch)
 	{
 	  cm_get_experiment_database(&hDB, NULL);
-	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsPressures/variables/demand", &hWatch);
-	  status = db_find_key(hDB, 0, "/equipment/UCN2EpicsPressures/variables/measured", &hRespond);
+	  status = db_find_key(hDB, 0, "/equipment/UCN2EpPha5Pre/variables/demand", &hWatch);
+	  status = db_find_key(hDB, 0, "/equipment/UCN2EpPha5Pre/variables/measured", &hRespond);
 	  if (status != DB_SUCCESS) {
 	    cm_msg(MERROR, "frontend_loop", "key not found");
 	    return FE_ERR_HW;
@@ -166,11 +165,11 @@ INT frontend_loop()
       if (hWatch) {
 	/* Check if Epics alive */
 	size = sizeof(float);
-	db_get_data_index(hDB, hRespond, &cat, &size, 21, TID_FLOAT);
+	db_get_data_index(hDB, hRespond, &cat, &size, 101, TID_FLOAT);
 	//if (abs(cat - dog) > 10.f)
 	//cm_msg(MINFO,"feEpics","R/W Access to Epics is in jeopardy!");
 	
-	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 21, TID_FLOAT);
+	db_set_data_index(hDB, hWatch, &dog, sizeof(float), 101, TID_FLOAT);
       }
       if (!((INT)++dog % 100)) dog = 0.f;
     }
