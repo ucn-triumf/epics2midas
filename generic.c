@@ -198,8 +198,6 @@ INT gen_init(EQUIPMENT * pequipment)
       gen_info->format = FORMAT_FIXED;
    else if (equal_ustring(str, "MIDAS"))
       gen_info->format = FORMAT_MIDAS;
-   else if (equal_ustring(str, "YBOS"))
-      gen_info->format = FORMAT_YBOS;
 
    /* count total number of channels */
    for (i = 0, gen_info->num_channels = 0; pequipment->driver[i].name[0]; i++) {
@@ -473,33 +471,6 @@ INT cd_gen_read(char *pevent, int offset)
       bk_close(pevent, pdata);
 
       return bk_size(pevent);
-   } else if (gen_info->format == FORMAT_YBOS) {
-#ifdef HAVE_YBOS
-      ybk_init((DWORD *) pevent);
-
-      /* create EVID bank */
-      ybk_create((DWORD *) pevent, "EVID", I4_BKTYPE, (DWORD *) (&pdw));
-      *(pdw)++ = EVENT_ID(pevent);      /* Event_ID + Mask */
-      *(pdw)++ = SERIAL_NUMBER(pevent); /* Serial number */
-      *(pdw)++ = TIME_STAMP(pevent);    /* Time Stamp */
-      ybk_close((DWORD *) pevent, pdw);
-
-      /* create DMND bank */
-      ybk_create((DWORD *) pevent, "DMND", F4_BKTYPE, (DWORD *) & pdata);
-      memcpy(pdata, gen_info->demand, sizeof(float) * gen_info->num_channels);
-      pdata += gen_info->num_channels;
-      ybk_close((DWORD *) pevent, pdata);
-
-      /* create MSRD bank */
-      ybk_create((DWORD *) pevent, "MSRD", F4_BKTYPE, (DWORD *) & pdata);
-      memcpy(pdata, gen_info->measured, sizeof(float) * gen_info->num_channels);
-      pdata += gen_info->num_channels;
-      ybk_close((DWORD *) pevent, pdata);
-
-      return ybk_size((DWORD *) pevent);
-#else
-      assert(!"YBOS support not compiled in");
-#endif
    }
 
    return 0;

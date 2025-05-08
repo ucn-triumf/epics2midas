@@ -53,7 +53,7 @@ LIB = $(LIB_DIR)/libmidas.a $(EPICS_LIBDIR)/libca.a $(EPICS_LIBDIR)/libCom.a
 CC = g++
 CCXX = g++
 CFLAGS = -g -Wall \
-	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include/os/Linux/ -I$(EPICS_DIR)/include/ -std=c++11   
+	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include/os/Linux/ -I$(EPICS_DIR)/include/ -std=c++11   -ldl
 LDFLAGS =
 
 all: fe_epics fe_epics_beamline fe_epics_ucn2 fe_epics_ucn2_temperatures fe_epics_ucn2_pressures fe_epics_ucn2_other fe_epics_ucn2_phase2b fe_epics_ucn2_phase3 fe_epics_ucn2_phase5_pre fe_epics_ucn2_phase5_oth fe_epics_ucn2_phase5_tmp fe_epics_ucn2_fast fe_epics_ucn2_phase5_oth2 fe_epics_ucn2_pur
