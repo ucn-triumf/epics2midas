@@ -94,7 +94,7 @@ EQUIPMENT equipment[] = {
     10000,                      /* read every 10 sec */
     0,                          /* stop run after this event limit */
     0,                          /* number of sub events */
-    1,                          /* log history every event */
+    10,                          /* log history every event */
      "", "", ""},
     cd_gen_read,                /* readout routine */
     cd_gen,                     /* class driver main routine */
