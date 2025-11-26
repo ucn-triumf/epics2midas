@@ -56,7 +56,7 @@ CFLAGS = -g -Wall \
 	-I. -I$(INC_DIR) -I$(DRV_DIR) -I$(EPICS_DIR)/include/os/Linux/ -I$(EPICS_DIR)/include/ -std=c++11   -ldl
 LDFLAGS =
 
-all: fe_epics fe_epics_beamline fe_epics_ucn2 fe_epics_ucn2_temperatures fe_epics_ucn2_pressures fe_epics_ucn2_other fe_epics_ucn2_phase2b fe_epics_ucn2_phase3 fe_epics_ucn2_phase5_pre fe_epics_ucn2_phase5_oth fe_epics_ucn2_phase5_tmp fe_epics_ucn2_fast fe_epics_ucn2_phase5_oth2 fe_epics_ucn2_pur
+all: fe_epics fe_epics_beamline fe_epics_ucn2 fe_epics_ucn2_temperatures fe_epics_ucn2_pressures fe_epics_ucn2_other fe_epics_ucn2_phase2b fe_epics_ucn2_phase3 fe_epics_ucn2_phase5_pre fe_epics_ucn2_phase5_oth fe_epics_ucn2_phase5_tmp fe_epics_ucn2_fast fe_epics_ucn2_phase5_oth2 fe_epics_ucn2_pur fe_epics_ucn2_fastepic
 
 
 fe_epics:  $(LIB) $(LIB_DIR)/mfe.o frontend.o $(DRIVERS)
@@ -104,6 +104,9 @@ fe_epics_ucn2_pur:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_pur.o $(DRIVERS)
 
 fe_epics_ucn2_fast:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_fastepics.o $(DRIVERS)
 	$(CCXX) $(CFLAGS) -o fe_epics_ucn2_fast frontend_ucn2_fastepics.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
+
+fe_epics_ucn2_fastepic:  $(LIB) $(LIB_DIR)/mfe.o frontend_ucn2_fastepic.o $(DRIVERS)
+	$(CCXX) $(CFLAGS) -o fe_epics_ucn2_fastepic frontend_ucn2_fastepic.o $(LIB_DIR)/mfe.o $(DRIVERS) $(LIB) $(LDFLAGS) $(LIBS)
 
 
 frontend.o: frontend.c
